@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>智能问答助手</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .chat-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-container {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 10px;
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 12px 16px;
+            border-radius: 15px;
+            max-width: 70%;
+        }
+
+        .user-message {
+            background-color: #e3f2fd;
+            margin-left: auto;
+        }
+
+        .bot-message {
+            background-color: #f5f5f5;
+            margin-right: auto;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #1976D2;
+        }
+
+        .loading {
+            color: #666;
+            font-style: italic;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="message-container" id="messageContainer">
+            <div class="message bot-message">您好！我是智能助手，请问有什么可以帮您？</div>
+        </div>
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="请输入您的问题...">
+            <button onclick="handleSend()">发送</button>
+        </div>
+    </div>
+
+    <script>
+        function handleSend() {
+            const userInput = document.getElementById('userInput');
+            const messageContainer = document.getElementById('messageContainer');
+            const question = userInput.value.trim();
+
+            if (!question) return;
+
+            // 添加用户消息
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.textContent = question;
+            messageContainer.appendChild(userMessage);
+
+            // 添加加载状态
+            const loading = document.createElement('div');
+            loading.className = 'message bot-message loading';
+            loading.textContent = '正在思考...';
+            messageContainer.appendChild(loading);
+
+            // 清空输入框
+            userInput.value = '';
+
+            // 模拟AI响应延迟
+            setTimeout(() => {
+                // 移除加载状态
+                messageContainer.removeChild(loading);
+                
+                // 创建回复消息
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot-message';
+                
+                // 判断问题并返回对应答案
+                if (question.includes('多大')) {
+                    botMessage.textContent = '我18';
+                } else if (question.includes('今天是几号')) {
+                    botMessage.textContent = '今天3.16号';
+                } else if (question.includes('问题')) {
+                    botMessage.textContent = '答案';
+                } else {
+                    botMessage.textContent = '暂时无法回答这个问题';
+                }
+                
+                messageContainer.appendChild(botMessage);
+                // 滚动到底部
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            }, 800);
+        }
+
+        // 回车键支持
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSend();
+            }
+        });
+    </script>
+</body>
+</html>
